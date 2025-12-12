@@ -1,0 +1,28 @@
+name: puthon workflow 
+
+on:
+   push
+
+jobs:
+    firstjob:
+       runs-on: ubuntu-latest
+       steps:
+       - name: checkout action 
+         uses: actions/checkout@v6
+         
+       - name: setup the python 
+         uses: actions/setup-python@v6 
+
+       - name: Installing the requirement
+         run: |
+            python -m pip install --upgrade pip 
+            pip install -r requirements.txt
+            
+       - name: Run pre-commit hooks
+         run: pre-commit run --all-files
+
+       - name: Run pyright
+         run: pyright     
+
+        
+   
