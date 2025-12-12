@@ -58,17 +58,38 @@ jobs:
 
        - name: checkout action 
          uses: actions/checkout@v6
-         
+
        - name: login to ECR 
          uses: aws-actions/amazon-ecr-login@v2 
          
        - name: Build, tag, and push docker image to Amazon ECR
          env:
-           REGISTRY: 054942703937.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
            REPOSITORY: dev/python
            IMAGE_TAG: ${{ github.sha }}
          run: |
-           echo $REGISTRY
            docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG  
 
+    terraformactivity:
+        runs-on: ubuntu-latest
+        needs: [ awsecrregistery ]  
+        steps:
+        - name: login to AWS 
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: ${{ secrets.AWS_REGION }}
+           
+        - name: checkout the repo 
+          uses: actions/checkout@v4
+
+        - name: setup the hasicorp
+          uses: hashicorp/setup-terraform@v3 
+          
+        - name: terraform init 
+          run: terraform init 
+
+        - name: terraform plan
+          run: terraform plan      
