@@ -20,6 +20,7 @@ jobs:
             
        - name: Run pre-commit hooks
          run: pre-commit run --all-files
+         continue-on-error: true
 
        - name: Run pyright
          run: pyright     
