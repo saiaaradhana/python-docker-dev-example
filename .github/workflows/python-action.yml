@@ -1,7 +1,8 @@
 name: puthon workflow 
 
 on:
-   push
+   workflow_dispatch:
+   push:
 
 jobs:
     firstjob:
