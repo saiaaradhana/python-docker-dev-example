@@ -26,6 +26,13 @@ jobs:
        - name: Run pyright
          run: pyright  
 
+    Dockerpushjob:
+       runs-on: ubuntu-latest
+       needs: [firstjob]
+       steps:
+       - name: checkout action 
+         uses: actions/checkout@v6
+
        - name: login to docker hub 
          uses: docker/login-action@v3
          with:
@@ -36,9 +43,7 @@ jobs:
          uses: docker/build-push-action@v6
          with:
             push: true
-            tags: ${{ vars.DOCKERHUB_USERNAME }}/pyapp:v1
+            tags: ${{ vars.DOCKERHUB_USERNAME }}/pyapp:v2
          
          
 
-        
-   
