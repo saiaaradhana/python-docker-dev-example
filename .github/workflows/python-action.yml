@@ -72,9 +72,12 @@ jobs:
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG  
 
        - name: scan the docker image 
+         env:
+           REGISTRY: 054942703937.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+           REPOSITORY: dev/python
          uses: aquasecurity/trivy-action@master
          with:
-           image-ref: $REGISTRY/$REPOSITORY:$IMAGE_TAG
+           image-ref: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
            format: table
            severity: HIGH,CRITICAL
            ignore-unfixed: true
