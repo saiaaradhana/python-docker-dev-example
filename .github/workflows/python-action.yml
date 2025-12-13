@@ -71,6 +71,16 @@ jobs:
            docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG  
 
+       - name: scan the docker image 
+         uses: aquasecurity/trivy-action@master
+         with:
+           scan-type: image
+           image: $REGISTRY/$REPOSITORY:$IMAGE_TAG
+           format: table
+           severity: HIGH,CRITICAL
+           ignore-unfixed: true
+           exit-code: 0
+
     terraformactivity:
         runs-on: ubuntu-latest
         needs: [ awsecrregistery ]  
