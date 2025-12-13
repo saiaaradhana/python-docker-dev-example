@@ -74,8 +74,7 @@ jobs:
        - name: scan the docker image 
          uses: aquasecurity/trivy-action@master
          with:
-           scan-type: image
-           image: $REGISTRY/$REPOSITORY:$IMAGE_TAG
+           image-ref: $REGISTRY/$REPOSITORY:$IMAGE_TAG
            format: table
            severity: HIGH,CRITICAL
            ignore-unfixed: true
